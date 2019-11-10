@@ -1,4 +1,4 @@
-const { tokenVerificator } = require('../helpers');
+const { tokenVereficator } = require('../helpers');
 
 module.exports = (req, res, next) => {
     try {
@@ -8,7 +8,7 @@ module.exports = (req, res, next) => {
             next(new Error('NO TOKEN'))
         }
 
-        const userFromToken = tokenVerificator(token);
+        const userFromToken = tokenVereficator(token);
 
         req.user = userFromToken;
 

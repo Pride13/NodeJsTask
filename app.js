@@ -21,9 +21,9 @@ app.engine('.hbs', expHbs({
 app.set('view engine', '.hbs');
 app.set('views', path.join(__dirname, 'static'));
 
-const { user, renderPage } = require('./controllers');
+const { user, renderPage, auth } = require('./controllers');
 const { provider } = require('./dataBase');
-const { users } = require('./middleware');
+const { users, checkAccessTokenMiddleware } = require('./middleware');
 
 //renderPage
 app.get('/registrations', renderPage.registrations);
@@ -31,9 +31,11 @@ app.get('/logination', renderPage.logination);
 app.get('/updateUser', renderPage.updateUser);
 
 //users
-app.post('/users', users.checkUserValidation, user.registerUser);
-app.post('/auth', users.isUserAuthPresent, user.authUser);
-app.post('/updateUsers', users.checkUpdateUserValidation, users.isUserUpdatePresent, user.updateUsers);
+app.post('/users', users.checkUserValidation, user.registerUser, users.checkUserIdFromTokenMW);
+app.post('/auth', users.isUserAuthPresent, user.authUser, auth.authUserController);
+app.post('/updateUsers', checkAccessTokenMiddleware ,users.checkUpdateUserValidation,
+    users.isUserUpdatePresent, user.updateUsers);
+
 
 app.all('*', renderPage.notFound);
 

@@ -1,2 +1,2 @@
 module.exports.tokinizer = require('./tokinizer');
-module.exports.tokenVerificator = require('./tokenVereficator');
+module.exports.tokenVereficator = require('./tokenVereficator');
