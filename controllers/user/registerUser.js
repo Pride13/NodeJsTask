@@ -1,11 +1,10 @@
-const { provider } = require('../../dataBase');
+const {userService} = require('../../service');
 
 module.exports = async (req, res) => {
     try {
-        const { email, password, firstName, lastName} = req.body;
-        const query = `insert into user(email, password, firstName, lastName) values (?, ?, ?, ?)`;
+        const userToCreate = req.body;
 
-        await provider.promise().query(query, [email, password, firstName, lastName]);
+        await userService.registerUserService(userToCreate);
 
         res.render('logination')
     } catch (e) {

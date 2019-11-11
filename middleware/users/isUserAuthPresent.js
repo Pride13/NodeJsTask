@@ -1,20 +1,15 @@
-const { provider } = require('../../dataBase');
+const { authService } = require('../../service');
 
 module.exports = async (req, res, next) => {
     try {
         const { email, password } = req.body;
-        const query = `SELECT * FROM user WHERE email = '${email}' AND password = '${password}'`;
 
-        const [isUserAuthPresent]= await provider.promise().query(query);
+        const { dataValues } = await authService.loginService(email, password);
 
-        if (!isUserAuthPresent.length) {
-            throw new Error(`${email} doesnt exist or incorrectly entered data. Please check`)
-        }
-
-        req.email = email;
+        req.user = dataValues;
 
         next();
     } catch (e) {
-        res.status(400).json(e.message)
+        res.status(400).json(e.message);
     }
 };

@@ -6,6 +6,10 @@ const path = require('path'); //library for working with paths
 //creating an application
 const app = express();
 
+//connection to dataBase
+const dataBase = require('./dataBase').getInstance();
+dataBase.setModels();
+
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
@@ -21,9 +25,11 @@ app.engine('.hbs', expHbs({
 app.set('view engine', '.hbs');
 app.set('views', path.join(__dirname, 'static'));
 
-const { user, renderPage, auth } = require('./controllers');
-const { provider } = require('./dataBase');
-const { users, checkAccessTokenMiddleware } = require('./middleware');
+// const { user, renderPage, auth } = require('./controllers');
+// const { provider } = require('./dataBase');
+// const { users } = require('./middleware');
+const { renderPage } = require('./controllers');
+const { userRouter, authRouter } = require('./router');
 
 //renderPage
 app.get('/registrations', renderPage.registrations);
@@ -31,12 +37,14 @@ app.get('/logination', renderPage.logination);
 app.get('/updateUser', renderPage.updateUser);
 
 //users
-app.post('/users', users.checkUserValidation, user.registerUser, users.checkUserIdFromTokenMW);
-app.post('/auth', users.isUserAuthPresent, user.authUser, auth.authUserController);
-app.post('/updateUsers', checkAccessTokenMiddleware ,users.checkUpdateUserValidation,
-    users.isUserUpdatePresent, user.updateUsers);
+// app.post('/users', users.checkUserValidation, user.registerUser, users.checkUserIdFromTokenMW);
+// app.post('/auth', users.isUserAuthPresent, user.authUser, auth.authUserController);
+// app.post('/updateUsers',users.checkUpdateUserValidation,
+//     users.isUserUpdatePresent, user.updateUsers);
+app.use('/users', userRouter);
+app.use('/auth', authRouter);
 
-
+//404
 app.all('*', renderPage.notFound);
 
 // app.all('*', async (req,res) => {

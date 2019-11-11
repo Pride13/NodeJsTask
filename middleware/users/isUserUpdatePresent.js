@@ -1,15 +1,16 @@
-const { provider } = require('../../dataBase');
+const { userService } = require('../../service');
 
 module.exports = async (req, res, next) => {
     try {
-        const {id} = req.body;
-        const query =  `select * from user where id = ${id}`;
+        const { user_id } = req.params;
 
-        const [isUserPresent] = await provider.promise().query(query);
+        const isUserPresent = await userService.getById(user_id);
 
-        if (!isUserPresent.length) {
-            throw new Error(`User with email ${id} is not present`)
+        if (!isUserPresent) {
+            throw new Error(`User with ID ${user_id} is not present`)
         }
+
+        req.user = isUserPresent;
 
         next()
     } catch (e) {
