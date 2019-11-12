@@ -1,7 +1,7 @@
 module.exports = userObject => {
-    const { email, password, firstName, lastName } = userObject;
+    const {id, email, password, firstName, lastName } = userObject;
 
-    if ( !email || !password || !firstName || !lastName ) {
+    if (!id || !email || !password || !firstName || !lastName ) {
         throw new Error('User is not valid')
     }
 };

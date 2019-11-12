@@ -25,9 +25,6 @@ app.engine('.hbs', expHbs({
 app.set('view engine', '.hbs');
 app.set('views', path.join(__dirname, 'static'));
 
-// const { user, renderPage, auth } = require('./controllers');
-// const { provider } = require('./dataBase');
-// const { users } = require('./middleware');
 const { renderPage } = require('./controllers');
 const { userRouter, authRouter } = require('./router');
 
@@ -37,24 +34,11 @@ app.get('/logination', renderPage.logination);
 app.get('/updateUser', renderPage.updateUser);
 
 //users
-// app.post('/users', users.checkUserValidation, user.registerUser, users.checkUserIdFromTokenMW);
-// app.post('/auth', users.isUserAuthPresent, user.authUser, auth.authUserController);
-// app.post('/updateUsers',users.checkUpdateUserValidation,
-//     users.isUserUpdatePresent, user.updateUsers);
 app.use('/users', userRouter);
 app.use('/auth', authRouter);
 
 //404
 app.all('*', renderPage.notFound);
-
-// app.all('*', async (req,res) => {
-//
-//     let [[query]] = await provider.promise().query('SELECT * FROM user');
-//
-//     console.log(query);
-//
-//     res.status(505).json('not found')
-// });
 
 //creating and running a server
 app.listen(3000, ()=> {

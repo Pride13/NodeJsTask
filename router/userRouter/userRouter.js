@@ -1,9 +1,14 @@
 const router = require('express').Router();
 
 const { user } = require('../../controllers');
-const { users } = require('../../middleware');
+const { users, checkAccessTokenMiddleware } = require('../../middleware');
 
 router.post('/', users.checkUserValidation, user.registerUser);
-router.patch('/:user_id', users.checkUpdateUserValidation, users.isUserUpdatePresent, user.updateUsers);
+router.patch('/:user_id',
+    checkAccessTokenMiddleware,
+    users.checkUpdateUserValidation,
+    users.checkUserIdFromTokenMW,
+    users.isUserUpdatePresent,
+    user.updateUsers);
 
 module.exports = router;

@@ -1,16 +1,11 @@
-const dataBase = require('../../dataBase').getInstance();
+const {userService} = require('../../service');
 
 module.exports = async (req, res) => {
     try {
         const patchUserObject = req.body;
         const { user_id } = req.params;
-        const UserModel = dataBase.getModel('User');
 
-        await UserModel.update(patchUserObject, {
-            where: {
-                id: user_id
-            }
-        });
+        await userService.updateUserService({id: user_id}, patchUserObject);
 
         res.redirect(`/users/${user_id}`)
     } catch (e) {
