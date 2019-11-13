@@ -1,7 +1,10 @@
 //calling libraries from package.json
 const express = require('express');
 const expHbs = require('express-handlebars');
+const dotenv = require('dotenv');
 const path = require('path'); //library for working with paths
+
+dotenv.config();
 
 //creating an application
 const app = express();

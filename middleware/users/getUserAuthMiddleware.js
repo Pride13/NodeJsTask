@@ -6,7 +6,7 @@ module.exports = async (req, res, next) => {
     const user = await userService.getUserByParams({email, password});
 
     if (!user) {
-        next(new Error('User is not present'));
+        return next(new Error('User is not present'));
     }
 
     req.user = user;

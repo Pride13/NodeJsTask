@@ -1,9 +1,7 @@
 const dataBase = require('../../dataBase').getInstance();
 
-module.exports = async (userToCreate) => {
+module.exports = userToCreate => {
     const UserModel = dataBase.getModel('User');
 
-    const registerUser = await UserModel.create(userToCreate);
-
-    return registerUser;
+    return UserModel.create(userToCreate);
 };
